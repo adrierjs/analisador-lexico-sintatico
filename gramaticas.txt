@@ -1,0 +1,20 @@
+GRAMÁTICA INFIXA:
+calculadora: calculo_list EOF;
+calculo_list: calculo*;
+calculo: expr_arit ';';
+expr_arit: termo expr_arit_sub_regra;
+expr_arit_sub_regra: (('+' | '-') expr_arit)*;
+termo: fator termo_sub_regra;
+termo_sub_regra: (('*' | '/') termo);
+fator: sinal? (CONST_INT | CONST_FLOAT | '(' expr_arit ')');
+sinal: '+' | '-';
+
+
+GRAMÁTICA PREFIXA:
+calculadora: calculo_list EOF;
+calculo_list: calculo*;
+calculo: expr_arit ';';
+expr_arit: operador expr_arit_sub_regra | operando;
+expr_arit_sub_regra: operando expr_arit_sub_regra | ε;
+operador: '+' | '-' | '*' | '/';
+operando: CONST_INT | CONST_FLOAT;

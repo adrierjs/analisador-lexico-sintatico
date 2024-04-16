@@ -1,18 +1,17 @@
 from lexer import Lexer
-from tokens import TokenType
+from parser_infixa import InfixParser
+from parser_prefixa import PrefixParser
 
 def main():
-    program_path = 'arquivo.txt' 
-    lexer = Lexer(program_path)
+    # PARSER INFIXA
+    # lexer = Lexer("expressoes_infixas.txt")
+    # parser = InfixParser(lexer)
+    # parser.parse()
 
-    try:
-        while True:
-            token = lexer.read_next_token()
-            print(token)
-            if token.token_type == TokenType.EOF:
-                break
-    finally:
-        lexer.close()
+    # PARSER PREFIXA
+    lexer = Lexer("expressoes_prefixa.txt")
+    parser = PrefixParser(lexer)
+    parser.parse()
 
 if __name__ == "__main__":
     main()
