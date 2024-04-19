@@ -8,7 +8,6 @@ def main():
     input_file_path = "expressoes_prefixa.txt"    
     lexer = Lexer(input_file_path)
     try:
-        # Lendo os tokens do programa e imprimindo-os
         while True:
             token = lexer.read_next_token()
             print(token)
