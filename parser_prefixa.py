@@ -43,6 +43,15 @@ class PrefixParser:
                 print(ex)
         else:
             raise SyntaxError(f"Expected {token_type}, found {la.token_type}")
+        
+    def parse(self):
+        try:
+            self.calculo_list() 
+        except SyntaxError as e:
+            print("Erro de sintaxe:", e)
+            print("Expressão não pôde ser analisada corretamente.")
+        finally:
+            self.close() 
 
     # Regra calculo_list: calculo*
     def calculo_list(self):
@@ -101,14 +110,7 @@ class PrefixParser:
         else:
             raise SyntaxError(f"Esperando {token.token_type}")
 
-    def parse(self):
-        try:
-            self.calculo_list() 
-        except SyntaxError as e:
-            print("Erro de sintaxe:", e)
-            print("Expressão não pôde ser analisada corretamente.")
-        finally:
-            self.close() 
+    
 
     def close(self):
         self.lexer.close()
