@@ -5,24 +5,33 @@ class Lexer:
     def __init__(self, program_path):
         self.buffer = Buffer(program_path)
 
+        # Dicionários para mapear operadores e caracteres especiais para os tipos de token correspondentes
         self.operators = {'+': TokenType.OP_SUM, '-': TokenType.OP_SUB, '*': TokenType.OP_MUL, '/': TokenType.OP_DIV}
         self.char_special = {'(': TokenType.ABRE_PAR, ')': TokenType.FECHA_PAR, ';': TokenType.PONTO_VIRGULA}
 
+        # Variável para armazenar o último caractere lido
         self.last_char = None
 
     def read_next_token(self):
         while True:
+            # Usa o último caractere lido se estiver disponível, caso contrário, lê do buffer
             char = self.last_char if self.last_char is not None else self.buffer.read_next_char()
+            # Reseta a variável last_char
             self.last_char = None
 
+            # Verifica se o caractere atual é o fim do arquivo
             if char == '':
                 return Token(TokenType.EOF, None)
+            # Ignora caracteres de espaço em branco
             elif char.isspace():
                 continue
+            # Verifica se o caractere atual é um operador
             elif char in self.operators:
                 return self.read_operator(char)
+            # Verifica se o caractere atual é um caractere especial
             elif char in self.char_special:
                 return self.read_char_special(char)
+            # Verifica se o caractere atual é um dígito
             elif char.isdigit():
                 return self.read_number(char)
             else:
@@ -60,6 +69,7 @@ class Lexer:
         if not last_was_digit:
             raise RuntimeError("Lexema não reconhecido")
         
+        # Retorna o token correspondente ao número (inteiro ou float) com seu lexema
         return Token(TokenType.CONST_FLOAT if has_decimal_point else TokenType.CONST_INT, lexeme)
 
     def close(self):

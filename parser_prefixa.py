@@ -65,6 +65,7 @@ class PrefixParser:
         self.expr_arit()
         self.match(TokenType.PONTO_VIRGULA)
 
+    # Regra expr_arit: operador expr_arit_sub_regra | operando
     def expr_arit(self):
         token = self.lookahead(1)
 
@@ -82,6 +83,7 @@ class PrefixParser:
             raise SyntaxError(f"Unexpected token {token.token_type}")
 
     def expr_arit_sub_regra(self):
+        # Regra expr_arit_sub_regra: operando expr_arit_sub_regra | ε
         token = self.lookahead(1)
 
         if token.token_type == TokenType.PONTO_VIRGULA:
@@ -91,6 +93,7 @@ class PrefixParser:
             self.expr_arit_sub_regra()
 
     def operando(self):
+        # Regra 'operando: CONST_INT | CONST_FLOAT'.
         token = self.lookahead(1)
 
         if token.token_type in [TokenType.CONST_INT, TokenType.CONST_FLOAT]:

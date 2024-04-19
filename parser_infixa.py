@@ -3,14 +3,15 @@ from tokens import TokenType
 class InfixParser:
     def __init__(self, lexer):
         self.lexer = lexer
-        self.buffer = [] 
-        self.confirm_token() 
+        self.buffer = []  # Buffer para armazenar os tokens
+        self.confirm_token()  # Preenche o buffer inicialmente
+        print("Expressão Infixa")
 
     def confirm_token(self):
         if self.buffer:
             self.buffer.pop(0)
 
-        while len(self.buffer) < 10: 
+        while len(self.buffer) < 10:  # BUFFER_SIZE
             next_token = self.lexer.read_next_token()
 
             if next_token.token_type == TokenType.COMMENT:
@@ -53,24 +54,29 @@ class InfixParser:
         finally:
             self.close()
 
+    # Regra: calculadora: calculo_list EOF;
     def calculadora(self):
         self.calculo_list()
         self.match(TokenType.EOF)
 
+    # Regra: calculo_list: calculo*;
     def calculo_list(self):
         token = self.lookahead(1)
         while token.token_type in [TokenType.ABRE_PAR, TokenType.CONST_INT, TokenType.CONST_FLOAT, TokenType.OP_SUB, TokenType.OP_SUM]:
             self.calculo()
             token = self.lookahead(1)
 
+    # Regra: calculo: expr_arit ';';
     def calculo(self):
         self.expr_arit()
         self.match(TokenType.PONTO_VIRGULA)
         
+    # Regra: expr_arit: termo expr_arit_sub_regra;
     def expr_arit(self):
         self.termo()
         self.expr_arit_sub_regra()
 
+    # Regra: expr_arit_sub_regra: (('+' | '-') expr_arit)*;
     def expr_arit_sub_regra(self):
         token = self.lookahead(1)
 
@@ -78,10 +84,12 @@ class InfixParser:
             self.match(token.token_type)
             self.expr_arit()
     
+    # Regra: termo: fator termo_sub_regra;
     def termo(self):
         self.fator()
         self.termo_sub_regra()
 
+    # Regra: termo_sub_regra: (('*' | '/') termo);
     def termo_sub_regra(self):
         token = self.lookahead(1)
 
@@ -89,6 +97,7 @@ class InfixParser:
             self.match(token.token_type)
             self.termo()
 
+    # Regra: fator: sinal? (CONST_INT | CONST_FLOAT | '(' expr_arit ')');
     def fator(self):
         self.sinal()
 
@@ -103,6 +112,7 @@ class InfixParser:
         else:
             raise SyntaxError("Unexpected token: " + str(token))
 
+    # Regra: sinal: '+' | '-';
     def sinal(self):
         token = self.lookahead(1)
 
