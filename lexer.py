@@ -31,9 +31,7 @@ class Lexer:
     def read_operator(self, initial_symbol):
             return Token(self.operators[initial_symbol], initial_symbol)
 
-
     def read_char_special(self, initial_symbol):
-        # Retorna o tipo de token correspondente para caracteres especiais
         return Token(self.char_special[initial_symbol], initial_symbol)
 
     def read_number(self, initial_symbol):
