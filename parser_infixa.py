@@ -5,7 +5,6 @@ class InfixParser:
         self.lexer = lexer
         self.buffer = []  # Buffer para armazenar os tokens
         self.confirm_token()  # Preenche o buffer inicialmente
-        print("Expressão Infixa")
 
     def confirm_token(self):
         if self.buffer:
