@@ -40,9 +40,10 @@ class Lexer:
 
     def read_operator(self, initial_symbol):
         # Verifica se o operador é um sinal de subtração, caso contrário, retorna o tipo de token correspondente
-        if initial_symbol == '-':
-            return Token(TokenType.OP_SUB, initial_symbol)
-        else:
+        #tratou primeiro o '-' pq estava considerando numero negarivo e nao um OP_SUB
+        # if initial_symbol == '-':
+        #     return Token(TokenType.OP_SUB, initial_symbol)
+        # else:
             return Token(self.operators[initial_symbol], initial_symbol)
 
 
@@ -88,5 +89,4 @@ class Lexer:
         return Token(TokenType.CONST_FLOAT if has_decimal_point else TokenType.CONST_INT, lexeme)
 
     def close(self):
-        # Fecha o buffer
         self.buffer.close()
