@@ -43,6 +43,15 @@ class PrefixParser:
                 print(ex)
         else:
             raise SyntaxError(f"Expected {token_type}, found {la.token_type}")
+        
+    def parse(self):
+        try:
+            self.calculo_list() 
+        except SyntaxError as e:
+            print("Erro de sintaxe:", e)
+            print("Expressão não pôde ser analisada corretamente.")
+        finally:
+            self.close() 
 
     # Regra calculo_list: calculo*
     def calculo_list(self):
@@ -82,8 +91,8 @@ class PrefixParser:
         else:
             raise SyntaxError(f"Unexpected token {token.token_type}")
 
+    # Regra expr_arit_sub_regra: operando expr_arit_sub_regra | ε
     def expr_arit_sub_regra(self):
-        # Regra expr_arit_sub_regra: operando expr_arit_sub_regra | ε
         token = self.lookahead(1)
 
         if token.token_type == TokenType.PONTO_VIRGULA:
@@ -92,8 +101,8 @@ class PrefixParser:
             self.expr_arit()
             self.expr_arit_sub_regra()
 
+    # Regra 'operando: CONST_INT | CONST_FLOAT'.
     def operando(self):
-        # Regra 'operando: CONST_INT | CONST_FLOAT'.
         token = self.lookahead(1)
 
         if token.token_type in [TokenType.CONST_INT, TokenType.CONST_FLOAT]:
@@ -101,14 +110,7 @@ class PrefixParser:
         else:
             raise SyntaxError(f"Esperando {token.token_type}")
 
-    def parse(self):
-        try:
-            self.calculo_list() 
-        except SyntaxError as e:
-            print("Erro de sintaxe:", e)
-            print("Expressão não pôde ser analisada corretamente.")
-        finally:
-            self.close() 
+    
 
     def close(self):
         self.lexer.close()
